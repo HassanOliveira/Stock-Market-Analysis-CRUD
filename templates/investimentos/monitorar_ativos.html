@@ -1,44 +1,63 @@
-<!-- monitorar_ativos.html -->
-<h1>Monitorar Ativos</h1>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monitor de Ativos - Monitorar Ativos</title>
+    <link rel="stylesheet" href="{% static 'styles/index.css' %}">
+</head>
+<body>
+    <form method="POST" action="{% url 'salvar_ativo' %}">
+      {% csrf_token %}
+      <label for="ativo">Nome do Ativo:</label>
+      <input type="text" name="ativo" required>
 
-<ul>
-  {% for configuracao in configuracoes %}
-    <li>
-      {{ configuracao.symbol }} - Limite Inferior: {{ configuracao.limite_inferior }}, Limite Superior: {{ configuracao.limite_superior }}
-      <form method="POST" action="{% url 'remover_ativo' configuracao.id %}">
-        {% csrf_token %}
-        <button type="submit">Remover</button>
-      </form>
-    </li>
-  {% empty %}
-    <li>Nenhuma configuração de ativo encontrada.</li>
-  {% endfor %}
-</ul>
+      <label for="limite_inferior">Limite Inferior:</label>
+      <input type="number" name="limite_inferior" required>
 
+      <label for="limite_superior">Limite Superior:</label>
+      <input type="number" name="limite_superior" required>
 
+      <input type="submit" value="Salvar">
+    </form>
+    <div class="content">
+    <h1>Monitorar Ativos</h1>
 
-<!-- Formulário para adicionar ativo -->
-<form method="POST" action="{% url 'salvar_ativo' %}">
-  {% csrf_token %}
-  <label for="ativo">Nome do Ativo:</label>
-  <input type="text" name="ativo" required>
+    <ul>
+      {% for configuracao in configuracoes %}
+        <li>
+          {{ configuracao.symbol }} - Limite Inferior: {{ configuracao.limite_inferior }}, Limite Superior: {{ configuracao.limite_superior }}
+          <form method="POST" action="{% url 'remover_ativo' configuracao.id %}">
+            {% csrf_token %}
+            <button type="submit">Remover</button>
+          </form>
+        </li>
+      {% empty %}
+        <li>Nenhuma configuração de ativo encontrada.</li>
+      {% endfor %}
+    </ul>
 
-  <label for="limite_inferior">Limite Inferior:</label>
-  <input type="number" name="limite_inferior" required>
-
-  <label for="limite_superior">Limite Superior:</label>
-  <input type="number" name="limite_superior" required>
-
-  <input type="submit" value="Salvar">
-</form>
-
-
-
-<!-- Opção para remover ativos -->
-{% for ativo in ativos %}
-  <form method="POST" action="{% url 'remover_ativo' ativo.id %}">
-    {% csrf_token %}
-    <p>{{ ativo.symbol }} - {% if ativo.configuracaoativo %}Limite Inferior: {{ ativo.configuracaoativo.limite_inferior }}, Limite Superior: {{ ativo.configuracaoativo.limite_superior }}{% else %}Sem configuração{% endif %}</p>
-    <input type="submit" value="Remover">
-  </form>
-{% endfor %}
+    <!-- Tabela para exibir as últimas cotações -->
+    <h2>Últimas Cotações:</h2>
+    <table>
+        <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Máxima</th>
+            <th>Mínima</th>
+            <th>Data e Hora</th>
+        </tr>
+        {% for cotacao in latest_cotacoes %}
+            <tr>
+                <td>{{ cotacao.ativo.symbol }}</td>
+                <td>{{ cotacao.ativo.nome }}</td>
+                <td>{{ cotacao.regularMarketPrice }}</td>
+                <td>{{ cotacao.regularMarketDayHigh }}</td>
+                <td>{{ cotacao.regularMarketDayLow }}</td>
+                <td>{{ cotacao.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+</body>
+</html>

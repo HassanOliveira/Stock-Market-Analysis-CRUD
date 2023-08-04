@@ -5,8 +5,9 @@
 </head>
 <body>
     <h1>Monitor de Ativos - Consultar Ativos</h1>
-    
+
     <h2>Ativos Monitorados:</h2>
+    
     <table>
         <tr>
             <th>Código</th>
@@ -16,16 +17,18 @@
             <th>Mínima</th>
             <th>Data e Hora</th>
         </tr>
-        {% for ativo in ativos %}
-        <tr>
-            <td>{{ ativo.symbol }}</td>
-            <td>{{ ativo.longName }}</td>
-            <td>{{ ativo.cotacoes.regularMarketPrice }}</td>
-            <td>{{ ativo.cotacoes.regularMarketDayHigh }}</td>
-            <td>{{ ativo.cotacoes.regularMarketDayLow }}</td>
-            <td>{{ ativo.cotacoes.regularMarketTime }}</td>
-        </tr>
+    
+        {% for cotacao in latest_cotacoes %}
+            <tr>
+                <td>{{ cotacao.ativo.symbol }}</td>
+                <td>{{ cotacao.ativo.nome }}</td>
+                <td>{{ cotacao.regularMarketPrice }}</td>
+                <td>{{ cotacao.regularMarketDayHigh }}</td>
+                <td>{{ cotacao.regularMarketDayLow }}</td>
+                <td>{{ cotacao.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
+            </tr>
         {% endfor %}
     </table>
+    
 </body>
 </html>

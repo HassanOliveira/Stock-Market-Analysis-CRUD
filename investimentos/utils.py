@@ -1,6 +1,8 @@
 import requests, pymongo
 from decimal import Decimal
+from django.utils import timezone
 from .models import Ativos, Cotacao, ConfiguracaoAtivo
+
 
 def conexao_db():
     client = pymongo.MongoClient("localhost", 27017)
@@ -10,7 +12,9 @@ def conexao_db():
 
 
 def obter_dados_ativos(codigo):
-    url = "https://brapi.dev/api/quote/{}?range=1d&interval=1d&fundamental=true&dividends=false".format(codigo)
+    url = "https://brapi.dev/api/quote/{}?range=1d&interval=1d&fundamental=true&dividends=false".format(
+        codigo
+    )
     response = requests.get(url)
     if response.status_code == 200:
         dados = response.json()
@@ -19,7 +23,7 @@ def obter_dados_ativos(codigo):
         return None
 
 
-def salvar_dados_BD(dados):
+def salvar_dados_BD(dados, user):
     # Obter os dados do primeiro resultado
     resultado = dados["results"][0]
     symbol = resultado["symbol"]
@@ -28,7 +32,7 @@ def salvar_dados_BD(dados):
     regularMarketPrice = Decimal(resultado["regularMarketPrice"])
     regularMarketDayHigh = Decimal(resultado["regularMarketDayHigh"])
     regularMarketDayLow = Decimal(resultado["regularMarketDayLow"])
-    regularMarketTime = resultado["regularMarketTime"]
+    regularMarketTime = timezone.now()
 
     # Criar ou atualizar o objeto Ativos
     ativo, created = Ativos.objects.update_or_create(
@@ -37,42 +41,40 @@ def salvar_dados_BD(dados):
             "symbol": symbol,
             "nome": longName,
             "moeda": currency,
-            "data_atualizacao": regularMarketTime
-        }
+            "data_atualizacao": regularMarketTime,
+        },
     )
 
     # Criar a instância de Cotacao
     cotacao = Cotacao.objects.create(
+        user=user,
         ativo=ativo,
         symbol=symbol,
         currency=currency,
         regularMarketPrice=regularMarketPrice,
         regularMarketDayHigh=regularMarketDayHigh,
         regularMarketDayLow=regularMarketDayLow,
-        regularMarketTime=regularMarketTime
+        regularMarketTime=regularMarketTime,
     )
 
 
-def configuracao_ativo(codigo, limite_inferior, limite_superior):
+def configuracao_ativo(user, codigo, limite_inferior, limite_superior):
     try:
-        # Tenta obter a configuração existente com o mesmo símbolo
-        configuracao = ConfiguracaoAtivo.objects.get(symbol=codigo)
+        # Tenta obter a configuração existente com o mesmo símbolo e usuário
+        configuracao = ConfiguracaoAtivo.objects.get(user=user, symbol=codigo)
         # Atualiza os limites inferiores e superiores da configuração existente
         configuracao.limite_inferior = limite_inferior
         configuracao.limite_superior = limite_superior
         configuracao.save()
     except ConfiguracaoAtivo.DoesNotExist:
-        # Se não existir uma configuração com o mesmo símbolo, cria uma nova configuração
+        # Se não existir uma configuração com o mesmo símbolo e usuário, cria uma nova configuração
         configuracao = ConfiguracaoAtivo.objects.create(
+            user=user,
             symbol=codigo,
             limite_inferior=limite_inferior,
-            limite_superior=limite_superior
+            limite_superior=limite_superior,
         )
 
-# PROBLEMA AO SALVAR OUTRA CONFIGURAÇÃO DE ATIVO. VERIFICAR RELAÇÃO ENTRE MODELS ATIVO E CONFIGURACAOATIVO.
-
-
-    
 
 def salvando_codigos_ativos():
     api_url = "https://brapi.dev/api/available"
