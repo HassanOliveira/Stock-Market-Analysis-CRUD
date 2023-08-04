@@ -1,0 +1,145 @@
+/* Estilos para a página de monitoramento de ativos */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f9; /* Cinza claro */
+}
+
+.configuracoes-table {
+    display: flex;
+    width: 60%;
+}
+
+.configuracoes {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff; /* Branco */
+    border-right: 1px solid #e0e6ed; /* Cinza claro */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilizando a lista de configurações */
+.configuracoes ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Estilizando cada item de configuração */
+.configuracao-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e0e6ed;
+    background-color: #ffffff;
+}
+
+/* Estilizando as informações de configuração */
+.configuracao-info {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.configuracao-info p {
+    margin: 0;
+    font-weight: bold;
+    white-space: nowrap; /* Evita quebras de linha */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Mostra "..." se o texto estourar */
+}
+
+/* Estilizando o botão remover */
+.remove-button {
+    background-color: #e74c3c; /* Vermelho */
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.remove-button:hover {
+    background-color: #c0392b; /* Vermelho mais escuro */
+}
+
+
+.ultimas-cotacoes {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff; /* Branco */
+    border-left: 1px solid #e0e6ed; /* Cinza claro */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #e0e6ed; /* Cinza claro */
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2; /* Cinza mais claro */
+}
+
+/* Estilos para formulário e links */
+form {
+    width: 60%;
+    margin: 20px auto; /* Centraliza o container e define margens iguais */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /* margin-top: 20px; Remova essa linha para alinhar verticalmente */
+}
+
+
+label {
+    margin-right: 0px;
+    font-weight: bold;
+    color: #333333; /* Preto */
+    flex: 1;
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 10px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    border: 1px solid #e0e6ed; /* Cinza claro */
+    border-radius: 4px;
+    flex: 2;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #2980b9; /* Azul escuro */
+    color: #ffffff; /* Branco */
+    padding: 10px 15px;
+    margin-right: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+}

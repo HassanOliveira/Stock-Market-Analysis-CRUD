@@ -1,0 +1,34 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Monitor de Ativos{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div id="menu">
+        <a id="logo" href="{% url 'index' %}">
+            <img class="logo-image" src="{% static 'assets/logo.png' %}" alt="Logo">
+        </a>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'monitorar_ativos' %}">Monitorar</a></li>
+            <li><a href="{% url 'consultar_ativos' %}">Consultar</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div id="footer">
+        <p>Projeto desenvolvido em Django por Hassan Bittencourt</p>
+    </div>
+</body>
+</html>

@@ -1,16 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monitor de Ativos</title>
-</head>
-<body>
-    <h1>Monitor de Ativos</h1>
+{% extends 'investimentos/base.html' %}
+{% load static %}
+
+{% block title %}
+    Página Inicial - Investimentos
+{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'styles/index.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="welcome-section">
+        <h1>Bem-vindo à Página Inicial</h1>
+        <p>Esta é a página inicial do nosso site de investimentos.</p>
+    </div>
     
-    <h2>Opções:</h2>
-    <ul>
-        <li><a href="/monitorar_ativos">Monitorar Ativos</a></li>
-        <li><a href="/consultar_ativos">Consultar Preços</a></li>
-    </ul>
-    <a href="{% url 'logout' %}">Sair</a>
-</body>
-</html>
+    <div class="featured-assets">
+        <h2>Ativos em Destaque</h2>
+        <ul>
+            <li>Ativo 1</li>
+            <li>Ativo 2</li>
+            <li>Ativo 3</li>
+            <!-- Adicione mais ativos em destaque aqui -->
+        </ul>
+    </div>
+    
+    <div class="latest-news">
+        <h2>Últimas Notícias</h2>
+        <ul>
+            <li>Notícia 1</li>
+            <li>Notícia 2</li>
+            <li>Notícia 3</li>
+            <!-- Adicione mais notícias recentes aqui -->
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f9; /* Cinza claro */
+}
+
+.configuracoes-table {
+    display: flex;
+    width: 60%;
+    margin: auto;
+}
+
+/* Monitor de Ativos */
+.configuracoes {
+    width: 60%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff; /* Branco */
+    border-right: 1px solid #e0e6ed; /* Cinza claro */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    margin-right: 10px;
+}
+
+.configuracoes ul {
+    list-style: none;
+    padding: 0;
+}
+
+.configuracao-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 10px 0 10px;
+    border: 1px solid #e0e6ed;
+    background-color: #ffffff;
+}
+
+.configuracao-info {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.configuracao-info p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Botão Remover */
+.remove-button {
+    background-color: #e74c3c;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.remove-button:hover {
+    background-color: #c0392b;
+}
+
+/* Últimas cotações */
+.ultimas-cotacoes {
+    width: 80%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-left: 1px solid #e0e6ed;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #e0e6ed;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Formulário */
+form {
+    width: 60%;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333333;
+    flex: 1;
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e0e6ed;
+    border-radius: 4px;
+    flex: 2;
+    box-sizing: border-box;
+}
+
+/* Botão Salvar */
+input[type="submit"] {
+    background-color: #2980b9;
+    color: #ffffff;
+    padding: 10px 15px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #2472a5;
+}

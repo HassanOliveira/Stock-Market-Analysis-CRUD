@@ -1,63 +1,74 @@
+{% extends 'investimentos/base.html' %}
+
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monitor de Ativos - Monitorar Ativos</title>
-    <link rel="stylesheet" href="{% static 'styles/index.css' %}">
-</head>
-<body>
+
+{% block title %}
+    Monitor de Ativos - Monitorar Ativos
+{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'styles/monitorar_ativos.css' %}">
+{% endblock %}
+
+{% block content %}
     <form method="POST" action="{% url 'salvar_ativo' %}">
-      {% csrf_token %}
-      <label for="ativo">Nome do Ativo:</label>
-      <input type="text" name="ativo" required>
-
-      <label for="limite_inferior">Limite Inferior:</label>
-      <input type="number" name="limite_inferior" required>
-
-      <label for="limite_superior">Limite Superior:</label>
-      <input type="number" name="limite_superior" required>
-
-      <input type="submit" value="Salvar">
+        {% csrf_token %}
+        <label for="ativo">Nome do Ativo:</label>
+        <input type="text" name="ativo" required>
+        
+        <label for="limite_inferior">Limite Inferior:</label>
+        <input type="number" name="limite_inferior" required>
+        
+        <label for="limite_superior">Limite Superior:</label>
+        <input type="number" name="limite_superior" required>
+        
+        <input type="submit" value="Salvar">
     </form>
-    <div class="content">
-    <h1>Monitorar Ativos</h1>
 
-    <ul>
-      {% for configuracao in configuracoes %}
-        <li>
-          {{ configuracao.symbol }} - Limite Inferior: {{ configuracao.limite_inferior }}, Limite Superior: {{ configuracao.limite_superior }}
-          <form method="POST" action="{% url 'remover_ativo' configuracao.id %}">
-            {% csrf_token %}
-            <button type="submit">Remover</button>
-          </form>
-        </li>
-      {% empty %}
-        <li>Nenhuma configuração de ativo encontrada.</li>
-      {% endfor %}
-    </ul>
+    <div class="configuracoes-table">
+        <div class="configuracoes">
+            <h1>Monitor de Ativos:</h1>
+            
+            <ul>
+                {% for configuracao in configuracoes %}
+                    <li class="configuracao-item">
+                        <div class="configuracao-info">
+                            <p>{{ configuracao.symbol }} - Limite Inferior: {{ configuracao.limite_inferior }} - Limite Superior: {{ configuracao.limite_superior }}</p>
+                        </div>
+                        <form method="POST" action="{% url 'remover_ativo' configuracao.id %}">
+                            {% csrf_token %}
+                            <button class="remove-button" type="submit">X</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li>Nenhuma configuração de ativo encontrada.</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <!-- Tabela para exibir as últimas cotações -->
-    <h2>Últimas Cotações:</h2>
-    <table>
-        <tr>
-            <th>Código</th>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Máxima</th>
-            <th>Mínima</th>
-            <th>Data e Hora</th>
-        </tr>
-        {% for cotacao in latest_cotacoes %}
-            <tr>
-                <td>{{ cotacao.ativo.symbol }}</td>
-                <td>{{ cotacao.ativo.nome }}</td>
-                <td>{{ cotacao.regularMarketPrice }}</td>
-                <td>{{ cotacao.regularMarketDayHigh }}</td>
-                <td>{{ cotacao.regularMarketDayLow }}</td>
-                <td>{{ cotacao.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+        <!-- Tabela para exibir as últimas cotações -->
+        <div class="ultimas-cotacoes">
+            <h1>Últimas Cotações:</h1>
+            <table>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Máxima</th>
+                    <th>Mínima</th>
+                    <th>Data e Hora</th>
+                </tr>
+                {% for cotacao in latest_cotacoes %}
+                    <tr>
+                        <td>{{ cotacao.ativo.symbol }}</td>
+                        <td>{{ cotacao.ativo.nome }}</td>
+                        <td>{{ cotacao.regularMarketPrice }}</td>
+                        <td>{{ cotacao.regularMarketDayHigh }}</td>
+                        <td>{{ cotacao.regularMarketDayLow }}</td>
+                        <td>{{ cotacao.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
-</body>
-</html>
+{% endblock %}
