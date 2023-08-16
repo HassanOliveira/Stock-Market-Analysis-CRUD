@@ -2,6 +2,10 @@ import requests, pymongo
 from decimal import Decimal
 from django.utils import timezone
 from .models import Ativos, Cotacao, ConfiguracaoAtivo
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+from datetime import datetime
 
 
 def conexao_db():

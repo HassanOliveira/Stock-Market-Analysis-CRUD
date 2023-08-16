@@ -1,11 +1,14 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Registro</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/registro.css' %}">
 </head>
 <body>
-    <h2>Registro</h2>
     <form method="post">
+        <h2>Registro</h2>
         {% csrf_token %}
         <ul>
             <li>{{ form.username.label_tag }} {{ form.username }}</li>

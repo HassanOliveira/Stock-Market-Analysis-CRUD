@@ -20,6 +20,8 @@ body {
     border-right: 1px solid #e0e6ed; /* Cinza claro */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     margin-right: 10px;
+    border: 1px solid #ccc; /* Adicionado borda */
+    border-radius: 10px;
 }
 
 .configuracoes ul {
@@ -34,6 +36,7 @@ body {
     padding: 0 10px 0 10px;
     border: 1px solid #e0e6ed;
     background-color: #ffffff;
+    border-radius: 10px;
 }
 
 .configuracao-info {
@@ -78,6 +81,8 @@ body {
     background-color: #ffffff;
     border-left: 1px solid #e0e6ed;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc; /* Adicionado borda */
+    border-radius: 10px;
 }
 
 ul {
@@ -124,7 +129,7 @@ input[type="number"] {
     padding: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
-    border: 1px solid #e0e6ed;
+    border: 1px solid #ccc;
     border-radius: 4px;
     flex: 2;
     box-sizing: border-box;

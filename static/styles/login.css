@@ -1,0 +1,86 @@
+/* Estilos para o corpo */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #174869;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para o formulário de login */
+form {
+    background-color: rgba(255, 255, 255, 0.945);
+    max-width: 300px;
+    margin: auto; /* Centralizando verticalmente e horizontalmente */
+    position: absolute;
+    top: 0;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    height: fit-content; /* Para dimensionar conforme o conteúdo */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc; /* Adicionado borda */
+}
+
+h2 {
+    font-size: 24px;
+    margin: 0 0 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 70%;
+    padding: 6px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    display: block;
+    margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #34495e;
+}
+
+/* Estilos para o link de registro */
+p {
+    text-align: center;
+    margin-top: 63vh; /* Espaço acima do link */
+    color: white;
+    text-shadow: 1px 1px 1px black; /* Adicionando sombra ao texto */
+    height: 30px;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold; /* Adicionando negrito */
+    font-size: 16px; /* Tamanho da fonte */
+    text-shadow: 1px 1px 1px black; /* Adicionando sombra ao texto */
+}
+
+a:hover {
+    color: #059afd;
+    text-decoration: none; /* Removendo o sublinhado */
+    font-size: 18px;
+    text-shadow: 2px 2px 4px black; /* Adicionando sombra ao texto ao passar o mouse */
+}
