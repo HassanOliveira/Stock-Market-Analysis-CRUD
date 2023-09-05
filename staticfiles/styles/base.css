@@ -13,6 +13,9 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    position: fixed; /* Torna o menu fixo */
+    top: 0; /* Alinha o menu no topo da janela */
+    width: 100%; /* Define a largura como 100% da janela */
 }
 
 .logo-image {

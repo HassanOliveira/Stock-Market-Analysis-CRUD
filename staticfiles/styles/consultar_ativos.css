@@ -12,6 +12,11 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     margin: 0 150px;
+    
+}
+
+.content {
+    margin-top: 4%;
 }
 
 .table-container {

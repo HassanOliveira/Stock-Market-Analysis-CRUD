@@ -5,6 +5,10 @@ body {
     background-color: #f4f7f9;
 }
 
+.content {
+    margin-top: 6%;
+}
+
 .configuracoes-table {
     display: flex;
     width: 67%;

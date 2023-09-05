@@ -1,3 +1,17 @@
+
+
+/* Estilos para o conteúdo */
+.content {
+    width: 70%;
+    margin-left: 15%;
+    margin-top: 7%;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    text-align: justify;
+    /* Outros estilos para o conteúdo, se necessário */
+}
+
+
 /* Estilos para o título */
 h1 {
     font-size: 24px;
