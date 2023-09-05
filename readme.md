@@ -23,7 +23,7 @@
   <img alt="HB Investimentos" title="HB Investimentos" src="./static/assets/gif.gif" />
 </h1>
 
-### 💡 Pre-requisites
+### 💡 Pré-requisitos
 
 Antes de começar, é necessário que você tenha as seguintes ferramentas instaladas em seu computador:
 [Git](https://git-scm.com), [Python](https://www.python.org/), [Python-pip](https://pypi.org/project/pip/), [MongoDB](https://www.mongodb.com/). 
