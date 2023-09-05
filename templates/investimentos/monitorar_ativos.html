@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    Monitor de Ativos - Monitorar Ativos
+    Monitor de Ativos
 {% endblock %}
 
 {% block extra_head %}
@@ -14,7 +14,12 @@
     <form method="POST" action="{% url 'salvar_ativo' %}">
         {% csrf_token %}
         <label for="ativo">Nome do Ativo:</label>
-        <input type="text" name="ativo" required>
+        <select name="ativo" id="ativoSelect" required>
+        <option value="" disabled selected>Selecione um ativo</option>
+        {% for codigo in codigos %}
+            <option value="{{ codigo }}">{{ codigo }}</option>
+        {% endfor %}
+    </select>
         
         <label for="limite_inferior">Limite Inferior:</label>
         <input type="number" name="limite_inferior" required>
@@ -31,7 +36,7 @@
     <div class="configuracoes-table">
         <div class="configuracoes">
             <h1>Monitor de Ativos:</h1>
-            
+            <!-- Exibindo as configurações dos ativos -->
             <ul>
                 {% for configuracao in configuracoes %}
                     <li class="configuracao-item">
@@ -72,6 +77,19 @@
                     </tr>
                 {% endfor %}
             </table>
+        </div>
+        <div class="pagination">
+            <span class="step-links">
+                {% if configuracoes.has_previous %}
+                    <a class="pagination-link" href="?page=1">Primeira</a>
+                    <a class="pagination-link" href="?page={{ configuracoes.previous_page_number }}">Anterior</a>
+                {% endif %}
+                
+                {% if configuracoes.has_next %}
+                    <a class="pagination-link" href="?page={{ configuracoes.next_page_number }}">Próxima</a>
+                    <a class="pagination-link" href="?page={{ configuracoes.paginator.num_pages }}">Última</a>
+                {% endif %}
+            </span>
         </div>
     </div>
 {% endblock %}

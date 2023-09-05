@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    Página Inicial - Investimentos
+    Home - {{ user.first_name }}
 {% endblock %}
 
 {% block extra_head %}
@@ -11,27 +11,52 @@
 
 {% block content %}
     <div class="welcome-section">
-        <h1>Bem-vindo à Página Inicial, {{ user.first_name }} {{ user.last_name }}!</h1>
-        <p>Esta é a página inicial do nosso site de investimentos.</p>
-    </div>
-    
-    <div class="featured-assets">
-        <h2>Ativos em Destaque</h2>
-        <ul>
-            <li>Ativo 1</li>
-            <li>Ativo 2</li>
-            <li>Ativo 3</li>
-            <!-- Adicione mais ativos em destaque aqui -->
-        </ul>
+        <h1>Bem-vindo, {{ user.first_name }} {{ user.last_name }}.</h1>
+        <p>Acompanhe as últimas notícias e monitore seus ativos com HB Investimentos!</p>
     </div>
     
     <div class="latest-news">
         <h2>Últimas Notícias</h2>
-        <ul>
-            <li>Notícia 1</li>
-            <li>Notícia 2</li>
-            <li>Notícia 3</li>
-            <!-- Adicione mais notícias recentes aqui -->
-        </ul>
+        <div class="news-grid">
+            <div class="featured-news">
+                {% for news_title, news_data in news_dict.items %}
+                    {% if forloop.first %}
+                        <div class="featured-news-item">
+                            <a href="{% url 'noticia' news_data.url %}">
+                                <img src="{{ news_data.image_url }}" alt="Imagem da Notícia">
+                                <h3>{{ news_title }}</h3>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <p>Notícias retiradas do website <a href="https://economia.uol.com.br/" target="_blank">UOL</a>.</p>
+            </div>
+            <div class="split-news">
+                <div class="medium-news">
+                    {% for news_title, news_data in news_dict.items %}
+                        {% if not forloop.first and forloop.counter <= 3 %}
+                            <div class="medium-news-item">
+                                <a href="{% url 'noticia' news_data.url %}">
+                                    <img src="{{ news_data.image_url }}" alt="Imagem da Notícia">
+                                    <h4>{{ news_title }}</h4>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="small-news">
+                    {% for news_title, news_data in news_dict.items %}
+                        {% if not forloop.first and forloop.counter > 3 %}
+                            <div class="small-news-item">
+                                <a href="{% url 'noticia' news_data.url %}">
+                                    <img src="{{ news_data.image_url }}" alt="Imagem da Notícia">
+                                    <h5>{{ news_title }}</h5>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

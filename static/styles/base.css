@@ -1,6 +1,6 @@
 /* Estilos para o corpo */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     padding: 0;
     background-color: #f4f7f9;
@@ -13,6 +13,9 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    position: fixed; /* Torna o menu fixo */
+    top: 0; /* Alinha o menu no topo da janela */
+    width: 100%; /* Define a largura como 100% da janela */
 }
 
 .logo-image {
@@ -59,4 +62,10 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+#footer p a {
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(148, 3, 184)
 }

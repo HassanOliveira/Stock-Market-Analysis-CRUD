@@ -1,6 +1,6 @@
 /* Estilos para o corpo */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     padding: 0;
     background-color: #174869;
@@ -12,17 +12,17 @@ body {
 form {
     background-color: rgba(255, 255, 255, 0.945);
     max-width: 300px;
-    margin: auto; /* Centralizando verticalmente e horizontalmente */
+    margin: auto;
     position: absolute;
     top: 0;
     bottom: 50px;
     left: 0;
     right: 0;
-    height: fit-content; /* Para dimensionar conforme o conteúdo */
+    height: fit-content;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ccc; /* Adicionado borda */
+    border: 1px solid #ccc;
 }
 
 h2 {
@@ -64,23 +64,23 @@ input[type="submit"]:hover {
 /* Estilos para o link de registro */
 p {
     text-align: center;
-    margin-top: 63vh; /* Espaço acima do link */
+    margin-top: 63vh;
     color: white;
-    text-shadow: 1px 1px 1px black; /* Adicionando sombra ao texto */
+    text-shadow: 1px 1px 1px black;
     height: 30px;
 }
 
 a {
     color: #3498db;
     text-decoration: none;
-    font-weight: bold; /* Adicionando negrito */
-    font-size: 16px; /* Tamanho da fonte */
-    text-shadow: 1px 1px 1px black; /* Adicionando sombra ao texto */
+    font-weight: bold;
+    font-size: 16px;
+    text-shadow: 1px 1px 1px black;
 }
 
 a:hover {
     color: #059afd;
-    text-decoration: none; /* Removendo o sublinhado */
+    text-decoration: none;
     font-size: 18px;
-    text-shadow: 2px 2px 4px black; /* Adicionando sombra ao texto ao passar o mouse */
+    text-shadow: 2px 2px 4px black;
 }

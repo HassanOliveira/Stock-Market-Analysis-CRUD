@@ -1,26 +1,30 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f9; /* Cinza claro */
+    background-color: #f4f7f9;
+}
+
+.content {
+    margin-top: 6%;
 }
 
 .configuracoes-table {
     display: flex;
-    width: 60%;
+    width: 67%;
     margin: auto;
 }
 
 /* Monitor de Ativos */
 .configuracoes {
-    width: 60%;
+    width: 70%;
     padding: 20px;
     box-sizing: border-box;
-    background-color: #ffffff; /* Branco */
-    border-right: 1px solid #e0e6ed; /* Cinza claro */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    background-color: #ffffff;
+    border-right: 1px solid #e0e6ed;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     margin-right: 10px;
-    border: 1px solid #ccc; /* Adicionado borda */
+    border: 1px solid #ccc;
     border-radius: 10px;
 }
 
@@ -75,13 +79,13 @@ body {
 
 /* Últimas cotações */
 .ultimas-cotacoes {
-    width: 80%;
+    width: 100%;
     padding: 20px;
     box-sizing: border-box;
     background-color: #ffffff;
     border-left: 1px solid #e0e6ed;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ccc; /* Adicionado borda */
+    border: 1px solid #ccc;
     border-radius: 10px;
 }
 
@@ -110,29 +114,33 @@ th {
 
 /* Formulário */
 form {
-    width: 60%;
+    width: 67%;
     margin: 20px auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    
 }
 
 label {
-    margin-right: 10px;
     font-weight: bold;
+    display: flex;
     color: #333333;
     flex: 1;
+    align-items: center;
+    margin: 5px;
+    text-align: center;
 }
 
 input[type="text"],
 input[type="number"] {
     padding: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
     flex: 2;
     box-sizing: border-box;
+    width: 30px;
+    text-align: center;
 }
 
 /* Botão Salvar */
@@ -140,8 +148,7 @@ input[type="submit"] {
     background-color: #2980b9;
     color: #ffffff;
     padding: 10px 15px;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    margin: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -150,5 +157,26 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
+    background-color: #2472a5;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px;
+    background-color: #2980b9;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-link:hover {
     background-color: #2472a5;
 }

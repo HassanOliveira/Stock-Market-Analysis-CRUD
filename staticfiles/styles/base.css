@@ -1,6 +1,6 @@
 /* Estilos para o corpo */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     padding: 0;
     background-color: #f4f7f9;
@@ -59,4 +59,10 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+#footer p a {
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(148, 3, 184)
 }

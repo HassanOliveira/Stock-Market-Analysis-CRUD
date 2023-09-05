@@ -1,9 +1,8 @@
 from django.db import models
-from decimal import Decimal
-from bson import ObjectId
 from django.contrib.auth.models import User
 
 
+# Estrutura do modelo Cotacao, onde contém as cotações dos ativos.
 class Cotacao(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ativo = models.ForeignKey("Ativos", on_delete=models.CASCADE)
@@ -15,6 +14,7 @@ class Cotacao(models.Model):
     regularMarketTime = models.DateTimeField()
 
 
+# Estrutura do modelo Ativos, onde contém as informações dos ativos.
 class Ativos(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     symbol = models.CharField(max_length=6)
@@ -24,17 +24,13 @@ class Ativos(models.Model):
     data_atualizacao = models.DateTimeField()
 
 
+# Estrutura do modelo ConfiguracaoAtivo, onde contém as configurações de monitoramento de cada ativo de cada usuário.
 class ConfiguracaoAtivo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    ativo = models.OneToOneField(Ativos, on_delete=models.CASCADE)
-    symbol = models.CharField(max_length=6)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=False)
+    ativo = models.ForeignKey(Ativos, on_delete=models.CASCADE)
+    symbol = models.CharField(max_length=6, db_index=False)
     limite_inferior = models.DecimalField(max_digits=10, decimal_places=2)
     limite_superior = models.DecimalField(max_digits=10, decimal_places=2)
 
-
-class Sugestoes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    symbol = models.CharField(max_length=50)
-    tipo = models.CharField(max_length=10)
-    preco = models.DecimalField(max_digits=10, decimal_places=2)
-    data_hora_sugestao = models.DateTimeField()
+    def __str__(self):
+        return f"{self.user} - {self.symbol}"
