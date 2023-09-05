@@ -50,8 +50,11 @@ $ venv/scripts/activate
 # Instale as dependências
 $ pip install -r requirements.txt
 
+# Faca a migração
+$ python manage.py migrate
+
 # Execute o projeto
-$ python3 manage.py runserver
+$ python manage.py runserver
 ```
 
 ### 🛠 Tecnologias
