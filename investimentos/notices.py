@@ -9,7 +9,7 @@ def get_news():
     noticias = soup.find_all("div")
     tgt_class = "thumbnail-standard-wrapper"
     news_dict = {}
-
+    print(soup)
     for noticia in noticias:
         if noticia and noticia.get("class"):
             if tgt_class in noticia.get("class"):

@@ -5,9 +5,9 @@ from django.core.paginator import Paginator, EmptyPage
 from django.contrib.auth.decorators import login_required
 from io import BytesIO
 from .models import Ativos, ConfiguracaoAtivo, Cotacao
-from .utils import salvando_codigos_ativos, processar_ativo, remove_indexes_with_prefix
+from .utils import saving_assets_codes, process_asset, remove_indexes_with_prefix
 from .notices import get_news, get_news_individual
-from .tasks import agendar_tarefa_periodica, cancelar_tarefa
+from .tasks import schedule_periodic_task, cancel_task
 from .forms import RegistroForm
 import matplotlib.pyplot as plt
 import base64
@@ -17,7 +17,7 @@ matplotlib.use("Agg")
 
 
 # Página de registro.
-def registro(request):
+def register(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)
         if form.is_valid():
@@ -43,7 +43,7 @@ def index(request):
 
 # Página da notícia acessada pelo usuário.
 @login_required
-def noticia_individual(request, noticia_url):
+def news_individual(request, noticia_url):
     news = get_news_individual(noticia_url)
 
     context = {"noticia_url": noticia_url, "news": news}
@@ -53,37 +53,37 @@ def noticia_individual(request, noticia_url):
 
 # Página monitorar.
 @login_required
-def monitorar_ativos(request):
+def asset_monitor(request):
     try:
-        configuracoes = ConfiguracaoAtivo.objects.filter(user=request.user).order_by(
-            "-ativo"
+        configs = ConfiguracaoAtivo.objects.filter(user=request.user).order_by(
+            "-asset"
         )
-        codigos = sorted(salvando_codigos_ativos())
+        codes = sorted(saving_assets_codes())
 
-        ativos_por_pagina = 5
+        asset_per_page = 5
 
-        paginator = Paginator(configuracoes, ativos_por_pagina)
+        paginator = Paginator(configs, asset_per_page)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
-        latest_cotacoes = []
+        latest_quotations = []
 
         for config in page_obj:
-            ativo = Ativos.objects.get(symbol=config.symbol, user=request.user)
-            latest_cotacao = (
-                Cotacao.objects.filter(ativo=ativo)
+            asset = Ativos.objects.get(symbol=config.symbol, user=request.user)
+            latest_quotation = (
+                Cotacao.objects.filter(asset=asset)
                 .order_by("-regularMarketTime")
                 .first()
             )
-            latest_cotacoes.append(latest_cotacao)
+            latest_quotations.append(latest_quotation)
 
         return render(
             request,
             "investimentos/monitorar_ativos.html",
             {
-                "configuracoes": page_obj,
-                "latest_cotacoes": latest_cotacoes,
-                "codigos": codigos,
+                "configs": page_obj,
+                "latest_quotations": latest_quotations,
+                "codes": codes,
             },
         )
 
@@ -93,17 +93,17 @@ def monitorar_ativos(request):
 
 # Função para salvar o monitoramento do ativo.
 @login_required
-def salvar_ativo(request):
+def save_asset(request):
     try:
         if request.method == "POST":
             user = request.user
-            symbol = request.POST["ativo"]
-            limite_inferior = request.POST["limite_inferior"]
-            limite_superior = request.POST["limite_superior"]
-            periodicidade = request.POST["periodicidade"]
+            symbol = request.POST["asset"]
+            lower_limit = request.POST["lower_limit"]
+            upper_limit = request.POST["upper_limit"]
+            periodicity = request.POST["periodicity"]
 
-            periodicidade = int(periodicidade)
-            segundos = periodicidade * 60
+            periodicity = int(periodicity)
+            seconds = periodicity * 60
 
             remove_indexes_with_prefix(
                 "INOAinvestimentos",
@@ -111,11 +111,11 @@ def salvar_ativo(request):
                 "investimentos_configuracaoativo_symbol",
             )
 
-            processar_ativo(user, symbol, limite_inferior, limite_superior)
+            process_asset(user, symbol, lower_limit, upper_limit)
 
             # Agende a tarefa com o intervalo especificado
-            agendar_tarefa_periodica(
-                user, symbol, limite_inferior, limite_superior, segundos
+            schedule_periodic_task(
+                user, symbol, lower_limit, upper_limit, seconds
             )
 
             # Redireciona para a página de monitorar ativos
@@ -127,11 +127,11 @@ def salvar_ativo(request):
 
 # Função para remover o monitoramento do ativo.
 @login_required
-def remover_ativo(request, configuracao_id):
+def remove_asset(request, configuracao_id):
     try:
-        configuracao = ConfiguracaoAtivo.objects.get(id=configuracao_id)
-        cancelar_tarefa(configuracao.user, configuracao.symbol)
-        configuracao.delete()
+        config = ConfiguracaoAtivo.objects.get(id=configuracao_id)
+        cancel_task(config.user, config.symbol)
+        config.delete()
         return redirect("monitorar_ativos")
     except ConfiguracaoAtivo.DoesNotExist:
         messages.error(request, "Configuração de ativo não encontrada.")
@@ -140,42 +140,42 @@ def remover_ativo(request, configuracao_id):
 
 # Página consultar.
 @login_required
-def consultar_ativos(request):
-    search_query = request.GET.get("ativo_search")
+def consult_assets(request):
+    search_query = request.GET.get("asset_search")
     page_number = request.GET.get("page", 1)
 
     if search_query:
-        cotacoes = Cotacao.objects.filter(user=request.user, symbol=search_query)
+        quotations = Cotacao.objects.filter(user=request.user, symbol=search_query)
     else:
-        cotacoes = []
+        quotations = []
 
     # Filtrar cotações e pegar o último valor de cada dia
-    filtered_cotacoes = {}
-    for cotacao in cotacoes:
-        cotacao_date = cotacao.regularMarketTime.date()
-        if cotacao_date not in filtered_cotacoes:
-            filtered_cotacoes[cotacao_date] = cotacao
+    filtered_quotations = {}
+    for quotation in quotations:
+        quotation_date = quotation.regularMarketTime.date()
+        if quotation_date not in filtered_quotations:
+            filtered_quotations[quotation_date] = quotation
         elif (
-            cotacao.regularMarketTime
-            > filtered_cotacoes[cotacao_date].regularMarketTime
+            quotation.regularMarketTime
+            > filtered_quotations[quotation_date].regularMarketTime
         ):
-            filtered_cotacoes[cotacao_date] = cotacao
+            filtered_quotations[quotation_date] = quotation
 
-    paginator = Paginator(list(filtered_cotacoes.values()), 10)
+    paginator = Paginator(list(filtered_quotations.values()), 10)
 
     try:
-        page_cotacoes = paginator.page(page_number)
+        page_quotations = paginator.page(page_number)
     except EmptyPage:
-        page_cotacoes = paginator.page(paginator.num_pages)
+        page_quotations = paginator.page(paginator.num_pages)
 
     # Converter cotações filtradas para listas de valores
-    datas = list(filtered_cotacoes.keys())
-    precos = [
-        float(str(cotacao.regularMarketPrice)) for cotacao in filtered_cotacoes.values()
+    datas = list(filtered_quotations.keys())
+    prices = [
+        float(str(quotation.regularMarketPrice)) for quotation in filtered_quotations.values()
     ]
 
     plt.figure(figsize=(8, 5))
-    plt.plot(datas, precos, marker="o")
+    plt.plot(datas, prices, marker="o")
     plt.title(f"Gráfico de Preço X Data para {search_query}")
     plt.xlabel("Data")
     plt.ylabel("Preço")
@@ -189,11 +189,11 @@ def consultar_ativos(request):
     plt.close()
     buffer.seek(0)
 
-    grafico_base64 = base64.b64encode(buffer.getvalue()).decode()
+    graph_base64 = base64.b64encode(buffer.getvalue()).decode()
 
     context = {
-        "search_results": page_cotacoes,
-        "grafico_base64": grafico_base64,
+        "search_results": page_quotations,
+        "graph_base64": graph_base64,
     }
 
     return render(request, "investimentos/consultar_ativos.html", context)

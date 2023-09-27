@@ -13,7 +13,7 @@
             <!-- Tabela de cotações -->
             <h2>Consultar Ativos:</h2>
             <form method="GET">
-                <input type="text" name="ativo_search" placeholder="Digite o código do ativo...">
+                <input type="text" name="asset_search" placeholder="Digite o código do ativo...">
                 <button type="submit" value="Buscar">Buscar</button>
             </form>
             <h3>Resultado da Busca:</h3>
@@ -27,35 +27,35 @@
                     <th>Data e Hora</th>
                 </tr>
             
-                {% for cotacao in search_results %}
+                {% for quotation in search_results %}
                     <tr>
-                        <td>{{ cotacao.ativo.symbol }}</td>
-                        <td>{{ cotacao.ativo.nome }}</td>
-                        <td>{{ cotacao.regularMarketPrice }}</td>
-                        <td>{{ cotacao.regularMarketDayHigh }}</td>
-                        <td>{{ cotacao.regularMarketDayLow }}</td>
-                        <td>{{ cotacao.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ quotation.asset.symbol }}</td>
+                        <td>{{ quotation.asset.name }}</td>
+                        <td>{{ quotation.regularMarketPrice }}</td>
+                        <td>{{ quotation.regularMarketDayHigh }}</td>
+                        <td>{{ quotation.regularMarketDayLow }}</td>
+                        <td>{{ quotation.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
                     </tr>
                 {% endfor %}
             </table>
             <div class="pagination">
                 {% if search_results.has_previous %}
-                    <a href="?ativo_search={{ request.GET.ativo_search }}&page=1">&laquo; Primeira</a>
-                    <a href="?ativo_search={{ request.GET.ativo_search }}&page={{ search_results.previous_page_number }}">Anterior</a>
+                    <a href="?ativo_search={{ request.GET.asset_search }}&page=1">&laquo; Primeira</a>
+                    <a href="?ativo_search={{ request.GET.asset_search }}&page={{ search_results.previous_page_number }}">Anterior</a>
                 {% endif %}
 
                 {% if search_results.has_next %}
-                    <a href="?ativo_search={{ request.GET.ativo_search }}&page={{ search_results.next_page_number }}">Próxima</a>
+                    <a href="?ativo_search={{ request.GET.asset_search }}&page={{ search_results.next_page_number }}">Próxima</a>
                 {% endif %}
             
                 {% if search_results.has_next %}
-                    <a href="?ativo_search={{ request.GET.ativo_search }}&page={{ search_results.paginator.num_pages }}">Última &raquo;</a>
+                    <a href="?ativo_search={{ request.GET.asset_search }}&page={{ search_results.paginator.num_pages }}">Última &raquo;</a>
                 {% endif %}
             </div>
         </div>
         <div class="graph-container">
             <h2>Gráfico de Preço X Data:</h2>
-            <img src="data:image/png;base64,{{ grafico_base64 }}" alt="Gráfico de Preço X Data">
+            <img src="data:image/png;base64,{{ graph_base64 }}" alt="Gráfico de Preço X Data">
         </div>
     </div>
 {% endblock %}

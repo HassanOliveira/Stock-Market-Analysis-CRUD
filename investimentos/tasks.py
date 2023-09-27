@@ -1,56 +1,56 @@
 from django.shortcuts import redirect
 from .utils import (
-    obter_dados_ativos,
+    get_active_data,
     conexao_db,
-    salvar_dados_BD,
-    configuracao_ativo,
+    save_data_BD,
+    asset_configuration,
 )
 
 import schedule
 import threading
 import time
 
-agendamentos = {}
+appointments = {}
 
 # Função para processar o ativo
-def processar_ativo(user, symbol, limite_inferior, limite_superior):
+def process_asset(user, symbol, lower_limit, upper_limit):
     try:
         with conexao_db() as client:
-            dados = obter_dados_ativos(symbol)
+            dados = get_active_data(symbol)
 
             if dados is not None:
-                salvar_dados_BD(dados, user)
+                save_data_BD(dados, user)
 
-                configuracao_ativo(user, symbol, limite_inferior, limite_superior)
+                asset_configuration(user, symbol, lower_limit, upper_limit)
 
     except Exception as e:
         print(f"Erro ao processar ativo: {type(e)} - {e}")
 
 
 # Função para agendar a tarefa para um ativo com intervalo personalizado
-def agendar_tarefa_periodica(user, symbol, limite_inferior, limite_superior, segundos):
+def schedule_periodic_task(user, symbol, lower_limit, upper_limit, seconds):
     try:
-        if user not in agendamentos:
-            agendamentos[user] = {}
+        if user not in appointments:
+            appointments[user] = {}
 
-        cancelar_tarefa(user, symbol)
+        cancel_task(user, symbol)
 
         # Agende uma nova tarefa com os dados atualizados
-        job = schedule.every(segundos).seconds.do(
-            processar_ativo, user, symbol, limite_inferior, limite_superior
+        job = schedule.every(seconds).seconds.do(
+            process_asset, user, symbol, lower_limit, upper_limit
         )
-        agendamentos[user][symbol] = job
+        appointments[user][symbol] = job
 
     except Exception as e:
         print(f"Erro ao agendar tarefa: {type(e)} - {e}")
 
 
-def cancelar_tarefa(user, symbol):
+def cancel_task(user, symbol):
     try:
-        if user in agendamentos:
-            if symbol in agendamentos[user]:
+        if user in appointments:
+            if symbol in appointments[user]:
                 # Se já existe uma tarefa agendada com o mesmo símbolo para o usuário, cancele-a
-                job = agendamentos[user][symbol]
+                job = appointments[user][symbol]
                 schedule.cancel_job(job)
 
     except Exception as e:
@@ -58,12 +58,12 @@ def cancelar_tarefa(user, symbol):
 
 
 # Função para iniciar o agendamento em segundo plano
-def iniciar_agendamento():
+def start_scheduling():
     while True:
         schedule.run_pending()
         time.sleep(1)
 
 
 # Inicie o agendamento em segundo plano em uma thread separada
-agendamento_thread = threading.Thread(target=iniciar_agendamento)
-agendamento_thread.start()
+appointment_thread = threading.Thread(target=start_scheduling)
+appointment_thread.start()

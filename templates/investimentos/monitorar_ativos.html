@@ -13,22 +13,22 @@
 {% block content %}
     <form method="POST" action="{% url 'salvar_ativo' %}">
         {% csrf_token %}
-        <label for="ativo">Nome do Ativo:</label>
-        <select name="ativo" id="ativoSelect" required>
+        <label for="asset">Nome do Ativo:</label>
+        <select name="asset" id="ativoSelect" required>
         <option value="" disabled selected>Selecione um ativo</option>
-        {% for codigo in codigos %}
-            <option value="{{ codigo }}">{{ codigo }}</option>
+        {% for code in codes %}
+            <option value="{{ code }}">{{ code }}</option>
         {% endfor %}
     </select>
         
-        <label for="limite_inferior">Limite Inferior:</label>
-        <input type="number" name="limite_inferior" required>
+        <label for="lower_limit">Limite Inferior:</label>
+        <input type="number" name="lower_limit" required>
         
-        <label for="limite_superior">Limite Superior:</label>
-        <input type="number" name="limite_superior" required>
+        <label for="upper_limit">Limite Superior:</label>
+        <input type="number" name="upper_limit" required>
         
-        <label for="periodicidade">Periodicidade:</label>
-        <input type="number" name="periodicidade" required>
+        <label for="periodicity">Periodicidade:</label>
+        <input type="number" name="periodicity" required>
         
         <input type="submit" value="Salvar">
     </form>
@@ -38,12 +38,12 @@
             <h1>Monitor de Ativos:</h1>
             <!-- Exibindo as configurações dos ativos -->
             <ul>
-                {% for configuracao in configuracoes %}
+                {% for config in configs %}
                     <li class="configuracao-item">
                         <div class="configuracao-info">
-                            <p>{{ configuracao.symbol }} - Limite Inferior: {{ configuracao.limite_inferior }} - Limite Superior: {{ configuracao.limite_superior }}</p>
+                            <p>{{ config.symbol }} - Limite Inferior: {{ config.lower_limit }} - Limite Superior: {{ config.upper_limit }}</p>
                         </div>
-                        <form method="POST" action="{% url 'remover_ativo' configuracao.id %}">
+                        <form method="POST" action="{% url 'remover_ativo' config.id %}">
                             {% csrf_token %}
                             <button class="remove-button" type="submit">X</button>
                         </form>
@@ -66,28 +66,28 @@
                     <th>Mínima</th>
                     <th>Data e Hora</th>
                 </tr>
-                {% for cotacao in latest_cotacoes %}
+                {% for quotation in latest_quotations %}
                     <tr>
-                        <td>{{ cotacao.ativo.symbol }}</td>
-                        <td>{{ cotacao.ativo.nome }}</td>
-                        <td>{{ cotacao.regularMarketPrice }}</td>
-                        <td>{{ cotacao.regularMarketDayHigh }}</td>
-                        <td>{{ cotacao.regularMarketDayLow }}</td>
-                        <td>{{ cotacao.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ quotation.asset.symbol }}</td>
+                        <td>{{ quotation.asset.name }}</td>
+                        <td>{{ quotation.regularMarketPrice }}</td>
+                        <td>{{ quotation.regularMarketDayHigh }}</td>
+                        <td>{{ quotation.regularMarketDayLow }}</td>
+                        <td>{{ quotation.regularMarketTime|date:"Y-m-d H:i:s" }}</td>
                     </tr>
                 {% endfor %}
             </table>
         </div>
         <div class="pagination">
             <span class="step-links">
-                {% if configuracoes.has_previous %}
+                {% if configs.has_previous %}
                     <a class="pagination-link" href="?page=1">Primeira</a>
-                    <a class="pagination-link" href="?page={{ configuracoes.previous_page_number }}">Anterior</a>
+                    <a class="pagination-link" href="?page={{ configs.previous_page_number }}">Anterior</a>
                 {% endif %}
                 
-                {% if configuracoes.has_next %}
-                    <a class="pagination-link" href="?page={{ configuracoes.next_page_number }}">Próxima</a>
-                    <a class="pagination-link" href="?page={{ configuracoes.paginator.num_pages }}">Última</a>
+                {% if configs.has_next %}
+                    <a class="pagination-link" href="?page={{ configs.next_page_number }}">Próxima</a>
+                    <a class="pagination-link" href="?page={{ configs.paginator.num_pages }}">Última</a>
                 {% endif %}
             </span>
         </div>

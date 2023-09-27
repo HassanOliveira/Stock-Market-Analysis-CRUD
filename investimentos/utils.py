@@ -19,17 +19,17 @@ def conexao_db():
 
 
 # Obtem os dados e cotações do ativo informado pelo usuário.
-def obter_dados_ativos(codigo):
+def get_active_data(code):
     try:
-        url = "https://brapi.dev/api/quote/{}?range=1d&interval=1d&fundamental=true&dividends=false".format(
-            codigo
+        url = "https://brapi.dev/api/quote/{}?token=cZJPm1YL52GCR59NJebeS2&range=1d&interval=1d&fundamental=true&dividends=false".format(
+            code
         )
         response = requests.get(url)
 
         response.raise_for_status()
 
-        dados = response.json()
-        return dados
+        datas = response.json()
+        return datas
 
     except requests.exceptions.RequestException as e:
         print(f"Erro de solicitação: {e}")
@@ -41,43 +41,43 @@ def obter_dados_ativos(codigo):
 
 
 # Salva as informações do ativo e suas cotações no banco de dados.
-def salvar_dados_BD(dados, user):
+def save_data_BD(datas, user):
     try:
-        resultado = dados["results"][0]
-        symbol = resultado["symbol"]
+        result = datas["results"][0]
+        symbol = result["symbol"]
 
-        if "longName" in resultado:
-            longName = resultado["longName"]
+        if "longName" in result:
+            longName = result["longName"]
         else:
             longName = None
 
-        currency = resultado["currency"]
-        regularMarketPrice = Decimal(resultado["regularMarketPrice"])
-        regularMarketDayHigh = Decimal(resultado["regularMarketDayHigh"])
-        regularMarketDayLow = Decimal(resultado["regularMarketDayLow"])
+        currency = result["currency"]
+        regularMarketPrice = Decimal(result["regularMarketPrice"])
+        regularMarketDayHigh = Decimal(result["regularMarketDayHigh"])
+        regularMarketDayLow = Decimal(result["regularMarketDayLow"])
         regularMarketTime = timezone.now()
 
         # Verificar se o ativo já existe com um usuário diferente
-        ativo_existente = Ativos.objects.filter(symbol=symbol, user=user).first()
+        existing_asset = Ativos.objects.filter(symbol=symbol, user=user).first()
 
-        if not ativo_existente:
+        if not existing_asset:
             # Caso contrário, crie um novo objeto Ativos com o user_id
-            ativo = Ativos.objects.create(
+            asset = Ativos.objects.create(
                 user=user,
                 symbol=symbol,
-                nome=longName,
-                moeda=currency,
-                data_atualizacao=regularMarketTime,
+                name=longName,
+                currency=currency,
+                update_date=regularMarketTime,
             )
         else:
-            ativo = ativo_existente
+            asset = existing_asset
 
-        ativo.save()
+        asset.save()
 
         # Criar a instância de Cotacao
-        cotacao = Cotacao.objects.create(
+        quotation = Cotacao.objects.create(
             user=user,
-            ativo=ativo,
+            asset=asset,
             symbol=symbol,
             currency=currency,
             regularMarketPrice=regularMarketPrice,
@@ -94,31 +94,31 @@ def salvar_dados_BD(dados, user):
 
 
 # Salva as configurações de monitoramento do ativo.
-def configuracao_ativo(user, symbol, limite_inferior, limite_superior):
+def asset_configuration(user, symbol, lower_limit, upper_limit):
     try:
         # Tenta obter a configuração existente com o mesmo símbolo e usuário
-        configuracao = ConfiguracaoAtivo.objects.get(user=user, symbol=symbol)
+        config = ConfiguracaoAtivo.objects.get(user=user, symbol=symbol)
         # Atualiza os limites inferiores e superiores da configuração existente
-        configuracao.limite_inferior = limite_inferior
-        configuracao.limite_superior = limite_superior
-        configuracao.save()
+        config.lower_limit = lower_limit
+        config.upper_limit = upper_limit
+        config.save()
     except ConfiguracaoAtivo.DoesNotExist:
         # Obtenha a instância de Ativos correspondente ao símbolo
-        ativo = Ativos.objects.get(symbol=symbol, user=user)
+        asset = Ativos.objects.get(symbol=symbol, user=user)
         # Crie uma nova configuração associada ao ativo obtido
-        configuracao = ConfiguracaoAtivo.objects.create(
+        config = ConfiguracaoAtivo.objects.create(
             user=user,
-            ativo=ativo,
+            asset=asset,
             symbol=symbol,
-            limite_inferior=limite_inferior,
-            limite_superior=limite_superior,
+            lower_limit=lower_limit,
+            upper_limit=upper_limit,
         )
     except Exception as e:
         print(f"Erro durante a operação de configuração: {type(e)} - {e}")
 
 
 # Salva os códigos dos ativos (ações).
-def salvando_codigos_ativos():
+def saving_assets_codes():
     try:
         api_url = "https://brapi.dev/api/available"
         response = requests.get(api_url)
@@ -130,8 +130,8 @@ def salvando_codigos_ativos():
         indices = data["indexes"]
         stocks = data["stocks"]
 
-        codigos = indices + stocks
-        return codigos
+        codes = indices + stocks
+        return codes
 
     except requests.exceptions.RequestException as e:
         print(f"Erro de solicitação: {e}")
@@ -144,14 +144,14 @@ def salvando_codigos_ativos():
 
 # Função para enviar e-mail.
 def enviar_email(destinatario, assunto, mensagem):
-    remetente = "emai@gmail.com"  # Substitua pelo seu endereço de e-mail
-    senha = "1234"  # Substitua pela senha do seu e-mail
+    sender = "emai@gmail.com"  # Substitua pelo seu endereço de e-mail
+    password = "1234"  # Substitua pela senha do seu e-mail
 
     # Configurar o servidor SMTP
-    servidor_smtp = (
+    server_smtp = (
         "smtp.centrale-med.fr"  # Substitua pelo servidor SMTP do seu provedor de e-mail
     )
-    porta_smtp = 587  # Ajuste para o seu provedor
+    port_smtp = 587  # Ajuste para o seu provedor
 
     msg = MIMEText(
         f"""
@@ -188,15 +188,15 @@ def enviar_email(destinatario, assunto, mensagem):
     msg["Subject"] = assunto
 
     try:
-        servidor = smtplib.SMTP(servidor_smtp, porta_smtp)
+        server = smtplib.SMTP(server_smtp, port_smtp)
 
-        servidor.starttls()
+        server.starttls()
 
-        servidor.login(remetente, senha)
+        server.login(sender, password)
 
-        servidor.sendmail(remetente, destinatario, msg.as_string())
+        server.sendmail(sender, destinatario, msg.as_string())
 
-        servidor.quit()
+        server.quit()
 
         print("E-mail enviado com sucesso!")
 
@@ -205,31 +205,31 @@ def enviar_email(destinatario, assunto, mensagem):
 
 
 # Obtem nova cotação, salva no banco de dados e compara com os limites impostos pelo usuário.
-def processar_ativo(user, symbol, limite_inferior, limite_superior):
+def process_asset(user, symbol, lower_limit, upper_limit):
     try:
         with conexao_db() as client:
-            dados = obter_dados_ativos(symbol)
+            datas = get_active_data(symbol)
 
-            if dados is not None:
-                price = salvar_dados_BD(dados, user)
+            if datas is not None:
+                price = save_data_BD(datas, user)
 
-                limite_inferior_decimal = decimal.Decimal(limite_inferior)
-                limite_superior_decimal = decimal.Decimal(limite_superior)
+                lower_limit_decimal = decimal.Decimal(lower_limit)
+                upper_limit_decimal = decimal.Decimal(upper_limit)
 
-                if price < limite_inferior_decimal:
+                if price < lower_limit_decimal:
                     enviar_email(
                         user.email,
                         f"COMPRE O ATIVO {symbol}!",
                         f"É uma boa hora para comprar o ativo {symbol}.",
                     )
-                elif price > limite_superior_decimal:
+                elif price > upper_limit_decimal:
                     enviar_email(
                         user.email,
                         f"VENDA O ATIVO {symbol}!",
                         f"É uma boa hora para vender o ativo {symbol}.",
                     )
 
-                configuracao_ativo(user, symbol, limite_inferior, limite_superior)
+                asset_configuration(user, symbol, lower_limit, upper_limit)
 
     except Exception as e:
         print(f"Erro ao processar ativo: {type(e)} - {e}")
