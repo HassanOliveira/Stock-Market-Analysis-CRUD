@@ -19,9 +19,9 @@
 	✅  Django + MongoDB 🚀 Finished  ✅
 </h4>
 
-<h1 align="center">
-  <img alt="HB Investimentos" title="HB Investimentos" src="./static/assets/gif.gif" />
-</h1>
+
+<img alt="HB Investimentos" title="HB Investimentos" src="./static/assets/gif.gif" />
+
 
 ### 💡 Pré-requisitos
 
